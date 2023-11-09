@@ -4,22 +4,39 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import { FormEventHandler } from 'react';
+import {ChangeEventHandler, FormEventHandler, useRef} from 'react';
 import { PageProps } from '@/types';
+import {File} from "buffer";
+
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }: { mustVerifyEmail: boolean, status?: string, className?: string }) {
     const user = usePage<PageProps>().props.auth.user;
+    const avaRef = useRef<HTMLImageElement>(null)
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
         email: user.email,
+        avatar: undefined,
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'));
+        patch(route('profile.update'), {
+            forceFormData: true,
+        });
     };
+
+    const onAvaChange: ChangeEventHandler<HTMLInputElement> = ({target: {files}}) => {
+      if (!files?.length) return;
+
+        const [ava] = files;
+
+        avaRef.current!.src = URL.createObjectURL(ava);
+
+        // @ts-ignore
+        setData('avatar', ava);
+    }
 
     return (
         <section className={className}>
@@ -32,6 +49,16 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
+
+                <div>
+                    <InputLabel htmlFor="avatar" value="Фото" />
+
+                    <img ref={avaRef} className={'w-28 rounded-full my-5'} src={user.avatar} alt="ava"/>
+                    <input type="file" onChange={onAvaChange} />
+
+                    <InputError className="mt-2" message={errors.avatar} />
+                </div>
+
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
 

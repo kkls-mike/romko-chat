@@ -32,6 +32,8 @@ export default function Login({ status, canResetPassword }: { status?: string, c
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
+            <h2 className={'text-white font-bold text-center text-3xl'}>Ромко здоров!</h2>
+
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
@@ -88,7 +90,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     )}
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
+                        Лог Ін
                     </PrimaryButton>
                 </div>
             </form>
