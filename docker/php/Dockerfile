@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libpng-dev \
     libonig-dev \
+    libbrotli-dev \
     libxml2-dev \
     git \
     cron \
